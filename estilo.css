@@ -1,0 +1,41 @@
+#login{
+    width: 1000px;
+    height: auto;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    
+}
+#vistadmin{
+    display: none;
+}
+#mensaje{
+    color: red;
+    display: none;
+}
+#ingresar{
+    text-align: center;
+}
+#botones{
+    margin-left: 80px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+#btngraficar{
+    width: 180px;
+}
+#graficas{
+    width: 900px;
+    height: 500px;
+    margin-left: 320px;
+    margin-top: -450px;
+    overflow: scroll;
+}
+#btndescargar{
+    margin-top: 20px;
+    margin-left: 680px;
+    margin-bottom: 30px;
+}
+#textografi{
+    margin-left: 55px;
+}

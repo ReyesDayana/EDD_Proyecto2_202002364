@@ -4,9 +4,105 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="estilo.css" type="text/css">
+    <script type="text/javascript" src="./Proyect.js"></script>  
     <title>Proyecto 2</title>
 </head>
 <body>
-    
+    <div id="login">
+        <form name="ingreso">
+            <h1 id="ingresar">Ingresar</h1>
+            <div class="form-group">
+              <label for="exampleInputEmail1"><b>Username</b></label>
+              <input type="text" class="form-control" name="usernameusaurio">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1"><b>Contraseña</b></label>
+              <input type="password" class="form-control" name="contrausuario">
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="checkadmin">
+              <label class="form-check-label" for="exampleCheck1">Administrador</label>
+            </div>
+            <p id="mensaje">Error ingresar datos otra vez</p>
+            <br>
+            <button type="button" class="btn btn-success" onclick="Login()">Ingresar</button>
+            <button type="button" class="btn btn-info" onclick="">Nuevo usuario</button>
+          </form>
+    </div>
+    <div id="vistadmin">
+      <div id="navadmin">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Movie Cats</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <input
+                  style="display:none"
+                  type="file"
+                  accept=".json,*"
+                  id="ingresopeliculas"
+                  onchange="LeerPeliculas(this)"
+                  >
+                  <a class="nav-link" onclick="ingresopeliculas.click()">Peliculas</a>
+                </li>
+                <li class="nav-item">
+                  <input
+                  style="display:none"
+                  type="file"
+                  accept=".json,*"
+                  onchange="LeerClientes(this)"
+                  id="ingresoClientes"
+                  >
+                  <a class="nav-link" onclick="ingresoClientes.click()">Clientes</a>
+                </li>
+                <li class="nav-item">
+                  <input
+                  style="display:none"
+                  type="file"
+                  accept=".json,*"
+                  id="ingresoActores"
+                  onchange=""
+                  >
+                  <a class="nav-link" onclick="ingresoActores.click()">Actores Iconicos</a>
+                </li>
+                <li class="nav-item">
+                  <input
+                  style="display:none"
+                  type="file"
+                  accept=".json,*"
+                  id="ingresoCategorias"
+                  onchange=""
+                  >
+                  <a class="nav-link" onclick="ingresoCategorias.click()">Categorias</a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+      </div>
+
+      <div id="botones">
+        <p id="textografi"><b>Graficas</b></p>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Peliculas</button>
+        <br>
+        <br>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Clientes</button>
+        <br>
+        <br>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Actores Iconicos</button>
+        <br>
+        <br>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Categorias</button>
+        <br>
+        <br>
+        <button id="btngraficar" type="button" class="btn btn-danger" onclick="SalirAdmin()">Salir</button>
+      </div>
+      <div id="graficas"></div>
+      <button id="btndescargar" type="button" class="btn btn-primary" >Descargar</button>
+    </div>
 </body>
 </html>
