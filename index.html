@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="estilo.css" type="text/css">
     <script type="text/javascript" src="./Proyect.js"></script>  
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>   
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
     <title>Proyecto 2</title>
 </head>
 <body>
@@ -28,7 +31,7 @@
             <p id="mensaje">Error ingresar datos otra vez</p>
             <br>
             <button type="button" class="btn btn-success" onclick="Login()">Ingresar</button>
-            <button type="button" class="btn btn-info" onclick="">Nuevo usuario</button>
+            <button type="button" class="btn btn-info" onclick="Registro()">Nuevo usuario</button>
           </form>
     </div>
     <div id="vistadmin">
@@ -66,7 +69,7 @@
                   type="file"
                   accept=".json,*"
                   id="ingresoActores"
-                  onchange=""
+                  onchange="LeerActores(this)"
                   >
                   <a class="nav-link" onclick="ingresoActores.click()">Actores Iconicos</a>
                 </li>
@@ -76,7 +79,7 @@
                   type="file"
                   accept=".json,*"
                   id="ingresoCategorias"
-                  onchange=""
+                  onchange="LeerCategorias(this)"
                   >
                   <a class="nav-link" onclick="ingresoCategorias.click()">Categorias</a>
                 </li>
@@ -87,16 +90,16 @@
 
       <div id="botones">
         <p id="textografi"><b>Graficas</b></p>
-        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Peliculas</button>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="MostrarPeliculas()">Peliculas</button>
         <br>
         <br>
-        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Clientes</button>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="MostrarClientes()">Clientes</button>
         <br>
         <br>
-        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Actores Iconicos</button>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="MostrarActores()">Actores Iconicos</button>
         <br>
         <br>
-        <button id="btngraficar" type="button" class="btn btn-primary" onclick="">Categorias</button>
+        <button id="btngraficar" type="button" class="btn btn-primary" onclick="MostrarCategorias()">Categorias</button>
         <br>
         <br>
         <button id="btngraficar" type="button" class="btn btn-danger" onclick="SalirAdmin()">Salir</button>
@@ -104,5 +107,171 @@
       <div id="graficas"></div>
       <button id="btndescargar" type="button" class="btn btn-primary" >Descargar</button>
     </div>
+    <div id="registro" style="display: none;">
+      <form name="registar">
+          <h1 id="ingresar">Registrarse</h1>
+            <div class="form-group">
+              <label for="exampleInputEmail1"><b>Nombre Completo</b></label>
+              <input type="text" class="form-control" name="nombreregistro">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1"><b>Usuario</b></label>
+              <input type="text" class="form-control" name="usernameregistro">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1"><b>Correo</b></label>
+              <input type="email" class="form-control" name="correoregistro">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1"><b>DPI</b></label>
+              <input type="text" class="form-control" name="dpi">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1"><b>Telefono</b></label>
+              <input type="text" class="form-control" name="Telefono">
+            </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1"><b>Contraseña</b></label>
+            <input type="password" class="form-control" name="contrareg">
+          </div>
+          <p id="mnsj">No se pudo completar el registro. Intente otra vez</p>
+          <p id="mnsje">Se registro con exito</p>
+          <button type="button" class="btn btn-success" onclick="Registrar()">Registrarse</button>
+          <button type="button" class="btn btn-info"  onclick="RegresarLog()">Regresar</button>
+          <br>
+        </form>
+  </div>
+  <div id="usuario">
+    <div id="navuser" style="display: none;">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="#">Movie Cats</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                <input
+                style="display:none"
+                type="file"
+                accept=".json,*"
+                id=""
+                onchange=""
+                >
+                <a class="nav-link" onclick="SeccionPeliculas()">Peliculas</a>
+              </li>
+              <li class="nav-item">
+                <input
+                style="display:none"
+                type="file"
+                accept=".json,*"
+                onchange=""
+                id=""
+                >
+                <a class="nav-link" onclick="MostrarcuadroActores()">Actores</a>
+              </li>
+              <li class="nav-item">
+                <input
+                style="display:none"
+                type="file"
+                accept=".json,*"
+                id=""
+                onchange=""
+                >
+                <a class="nav-link" onclick="">Categorias</a>
+              </li>
+              <li class="nav-item">
+                <input
+                style="display:none"
+                type="file"
+                accept=".json,*"
+                id=""
+                onchange=""
+                >
+                <a class="nav-link" onclick="SalirUsuario()">Salir</a>
+              </li>
+          </ul>
+          </div>
+      </nav>
+    </div>
+    <div id="peliculas">
+      <h1>Peliculas</h1>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Titulo</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Puntuacion</th>
+            <th scope="col">Informacion</th>
+            <th scope="col">Alquilar</th>
+          </tr>
+        </thead>
+        <tbody id="tabladepeliculas">
+          
+        </tbody>
+      </table>
+    </div>
+    <div id="pelicula">
+      <p id="idpel" style="display: none;"></p>
+      <h1 id="titulopel"></h1>
+      <p id="descripcionpel"></p>
+      <p id="puntuacion"></p>
+      <p id="precio"></p>
+      <input id="estrellas" type="text" size="10">
+      <p><em>Diferente opinion? Califica la pelicula y deja un comentario!</em></p>
+      <button type="button" class="btn btn-info"  onclick="ModificarEstrellas()">Modificar Puntuacion</button>
+      <button type="button" class="btn btn-info"  onclick="">Alquilar</button>
+      <br>
+      <br>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Comentarios</th>
+          </tr>
+        </thead>
+        <tbody id="tablacomentarios">
+          
+        </tbody>
+      </table>
+      <input id="comentario" type="text" size="100">
+      <button type="button" class="btn btn-success btn-sm"  onclick="AgregarComentario()">Agregar comentario</button>
+      <br>
+      <button type="button" class="btn btn-success"  onclick="RegresarPeliculas()">Regresar</button>
+    </div>
+    <div id="actores">
+      <h1>Actores</h1>
+      <button type="button" class="btn btn-primary btn-sm"  onclick="InOrderActores()">In Orden</button>
+      <button type="button" class="btn btn-primary btn-sm"  onclick="MostrarcuadroActores()">Pre Orden</button>
+      <button type="button" class="btn btn-primary btn-sm"  onclick="PostOrderActores()">Post Orden</button>
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">DNI</th>
+            <th scope="col">Actor</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Descripcion</th>
+          </tr>
+        </thead>
+        <tbody id="tabladeactores">
+          
+        </tbody>
+      </table>
+    </div>
+    <div id="categorias">
+      <h1>Categorias</h1>
+      <table class="table" >
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Compañia</th>
+          </tr>
+        </thead>
+        <tbody id="tablacategorias">
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-#login{
+#login,#registro{
     width: 1000px;
     height: auto;
     margin: auto;
@@ -9,8 +9,12 @@
 #vistadmin{
     display: none;
 }
-#mensaje{
+#mensaje,#mnsj{
     color: red;
+    display: none;
+}
+#mnsje{
+    color: rgb(118, 184, 19);
     display: none;
 }
 #ingresar{
@@ -38,4 +42,10 @@
 }
 #textografi{
     margin-left: 55px;
+}
+#peliculas,#pelicula,#actores,#categorias{
+    display: none;
+    text-align: center;
+    width: 1300px;
+    margin: auto;
 }
