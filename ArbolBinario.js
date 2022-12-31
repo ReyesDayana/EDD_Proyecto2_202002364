@@ -68,16 +68,16 @@ class ArbolBinario{
         graficarbinario+="node[shape=circle] \n"
         graficarbinario+="label= \"Arbol Binario\" \n"
         graficarbinario+=this.EscribirNodos(this.raiz)
-        graficarbinario+="\n";
-        graficarbinario+= this.EscribirEnlaces(this.raiz);
+        graficarbinario+="\n"
+        graficarbinario+= this.EscribirEnlaces(this.raiz)
         graficarbinario+="\n}"
         console.log(graficarbinario)
         fs.writeFile("Lista.dot", graficarbinario, function(err) {
             if (err) {
-            return console.log(err);
+            return console.log(err)
             }
-        exec("dot -Tpng Lista.dot -o Lista.png ");
-        });
+        exec("dot -Tpng Lista.dot -o Lista.png ")
+        })
 
     }
     EscribirNodos(nodo){
@@ -87,7 +87,7 @@ class ArbolBinario{
         if(nodo!=null){
             nodobinarionombre=nodo.nombre.replace(/\s+/g,"")
             nodobinario="nodob"+nodo.dni+nodobinarionombre
-            escribirnodosbinario+=nodobinario+"[label=\" Artista: "+nodo.nombre+"\nDni: "+nodo.dni+"\nDescripcion: "+nodo.descripcion+"\"]\n";
+            escribirnodosbinario+=nodobinario+"[label=\" Artista: "+nodo.nombre+"\nDni: "+nodo.dni+"\nDescripcion: "+nodo.descripcion+"\"]\n"
             if(nodo.derecha!=null && nodo.izquierda==null){  
                 escribirnodosbinario+=this.contador+'[label="izquierda" shape=box]\n'  
                 escribirnodosbinario+=nodobinario+' -> '+this.contador

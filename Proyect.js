@@ -1,3 +1,4 @@
+
 //LISTA SIMPLE
 class NodoUsuario{
     constructor(dpi,nombre,usuario,correo,contra,telefono,administrador){
@@ -473,6 +474,128 @@ class AVL{
         return escribiravlenlaces
     }
 }
+//Tabla Hash
+class NodoListaHash{
+    constructor(idcategoria,company){
+        this.idcategoria=idcategoria
+        this.company=company
+        this.siguiente=null
+    }
+}
+class ListaHash{
+    constructor(){
+        this.primero=null
+        this.tam=0
+    }
+    AgregarLista(idcategoria,company){
+        this.tam+=1
+        var nuevonodo=new NodoListaHash(idcategoria,company)
+        nuevonodo.siguiente=this.primero
+        this.primero=nuevonodo
+        
+    }
+    Vacia(){
+        if(this.tam==0){
+            return true
+        }
+        return false
+    }
+    ImprimirLista(){
+        var aux=this.primero
+        while(aux!=null){
+            console.log("\tId: "+aux.idcategoria+" company: "+aux.company)
+            aux=aux.siguiente
+        }
+    }
+}
+class TablaHash{
+    constructor(){
+        this.ocupacion=0
+        this.tamanio=20
+        this.tabla=[]
+        for (let i = 0; i < this.tamanio; i++) {
+            this.tabla[i]=new ListaHash()
+            
+        }
+    }
+    insertar(idcategoria,company){
+        var index=idcategoria%this.tamanio
+        if(this.tabla[index].Vacia()){
+            this.ocupacion+=1
+        }
+        this.tabla[index].AgregarLista(idcategoria,company)
+        this.rehash()
+    }
+    rehash(){
+        var ocup=this.ocupacion/this.tamanio
+        if(ocup>0.75){
+            var auxiliar=this.tabla
+            var auxtamanio=this.tamanio
+            this.tamanio=this.ocupacion*5
+            this.tabla=[]
+            for (let i = 0; i < this.tamanio; i++) {
+                this.tabla[i]=new ListaHash()
+            }
+            this.ocupacion=0
+            for (let y = 0; y < auxtamanio; y++) {
+                if(!auxiliar[y].Vacia()){
+                    var nodo=auxiliar[y].primero
+                    while(nodo!=null){
+                        this.insertar(nodo.idcategoria,nodo.company)
+                        nodo=nodo.siguiente
+                    }
+                }
+                
+            }
+        }
+    }
+    ImprimirTabla(){
+        console.log("ocp "+this.ocupacion)
+        for (let i = 0; i < this.tamanio; i++) {
+            console.log("index tabla: "+i)
+            this.tabla[i].ImprimirLista()
+        }
+    }
+    GraficarTabla(){
+        var escribirhash=""
+        escribirhash+="digraph T { \n"
+        escribirhash+="node[shape=box] \n"
+        escribirhash+="label= \"Tabla Hash\" \n"
+        for (let i = 0; i < this.tamanio; i++) {
+            escribirhash+="nodop"+i+"[label=\" indice: "+i+"\"]\n"
+            var auxiliar=this.tabla[i].primero
+            while(auxiliar!=null){
+                var nodonombre="nodo"+auxiliar.idcategoria
+                escribirhash+=nodonombre+"[label=\" ID: "+auxiliar.idcategoria+"\nCompany: "+auxiliar.company+"\"]\n"
+                auxiliar=auxiliar.siguiente
+            }
+        }
+        for (let i = 0; i < this.tamanio; i++) {
+            if(i!=this.tamanio-1){
+                escribirhash+="nodop"+i+" -> nodop"+(i+1)+"\n"
+            }
+            var auxiliar=this.tabla[i].primero
+            while(auxiliar!=null){
+                var nodonombre="nodo"+auxiliar.idcategoria
+                if(auxiliar==this.tabla[i].primero){
+                    escribirhash+="{ rank=same nodop"+i+" -> "+nodonombre+"}\n"
+                }
+                if(auxiliar.siguiente!=null){
+                    var nodonombresiguiente="nodo"+auxiliar.siguiente.idcategoria
+                    escribirhash+="{ rank=same "+ nodonombre+" -> "+nodonombresiguiente+"}\n"
+                }
+                
+                auxiliar=auxiliar.siguiente
+            }
+        }
+        escribirhash+="}\n"
+        d3.select("#graficas").graphviz()
+
+        .width(900)
+        .height(500)
+        .renderDot(escribirhash)
+    }
+}
 //LOGICA
 //Log
 function Login(){
@@ -609,6 +732,7 @@ function LeerCategorias(archivo){
             console.log("Información del cleinte")
             console.log("\tID: "+categorias[i].id_categoria)
             console.log("\tCompañia: "+categorias[i].company)
+            Categorias.insertar(categorias[i].id_categoria,categorias[i].company)
         }
     };
     reader.onerror = function() {
@@ -626,11 +750,12 @@ function MostrarActores(){
     Actores.GraficarArbol()
 }
 function MostrarCategorias(){
-
+    Categorias.GraficarTabla()
 }
 function SeccionPeliculas(){
     this.OcultarPelicula()
     this.OcultarActores()
+    this.OcultarCategorias()
     var cuadripel=document.getElementById('peliculas')
     cuadripel.style.display="block"
     var tablapeli=document.getElementById('tabladepeliculas')
@@ -651,6 +776,7 @@ function SalirUsuario(){
 function SeccionPelicula(id,pelicula,descripcion,puntuacion,precio,comentarios){
     this.OcultarPeliculas()
     this.OcultarActores()
+    this.OcultarCategorias()
     var idpeli=document.getElementById('idpel')
     idpeli.innerHTML=id
     var pel=document.getElementById('pelicula')
@@ -711,6 +837,7 @@ function ModificarEstrellas(){
 function MostrarcuadroActores(){
     this.OcultarPelicula()
     this.OcultarPeliculas()
+    this.OcultarCategorias()
     var cuadroactores=document.getElementById("actores")
     cuadroactores.style.display="block"
     var tablaactores=document.getElementById("tabladeactores")
@@ -731,9 +858,42 @@ function OcultarActores(){
     var cuadroactores=document.getElementById("actores")
     cuadroactores.style.display="none"
 }
+function CuadroCategorias(){
+    this.OcultarPeliculas()
+    this.OcultarActores()
+    this.OcultarPelicula()
+    var cuadroactores=document.getElementById("categorias")
+    cuadroactores.style.display="block"
+    var tablacat=document.getElementById("tablacategorias")
+    tablacat.innerHTML=""
+    var recorrer=Categorias.tamanio
+    for (let i = 0; i < recorrer; i++) {
+        var auxiliar=Categorias.tabla[i].primero
+        while(auxiliar!=null){
+            tablacat.innerHTML+="<tr>\n"+
+                     "\t<td>"+auxiliar.idcategoria+"</td>\n"+
+                     "\t<td>"+auxiliar.company+"</td>\n"+
+                    "</tr>\n"
+            auxiliar=auxiliar.siguiente
+        }
+        
+    }
+
+}
+function OcultarCategorias(){
+    var cuadroactores=document.getElementById("categorias")
+    cuadroactores.style.display="none"
+}
+function DescargarImagen() {
+    
+}
+function Reset(){
+    d3.select("#graficas").graphviz().resetZoom()
+}
 var Usuarios = new ListaUsuarios()
 Usuarios.AgregarUsuario(2354168452525,"Oscar Armin","EDD","edd@gmail.com","12345678","12345678",true)
 Usuarios.AgregarUsuario(3533294870101,"dayana","dayana","dayana@gmail.com","dayana","12345678",false)
 var Actores=new ArbolBinario()
 var Peliculas=new AVL()
-Peliculas.AgregarNodoAVL("2","hbrvh","dkfhvbjhdfbvjhfb",3,480,12,"nose")
+var Categorias=new TablaHash()
+Peliculas.AgregarNodoAVL("2","La quinta ola","Se mueren todos por unos extraterrestres que pretenden dominar el mundoooo asi bien loco jajjajaja esta bien loca la pelicula en fin stream Warrior Nun #SaveWarriorNun",3,480,12,"nose")

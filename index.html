@@ -10,6 +10,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>   
     <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.1/dist/html2canvas.min.js"></script> 
     <title>Proyecto 2</title>
 </head>
 <body>
@@ -105,7 +106,8 @@
         <button id="btngraficar" type="button" class="btn btn-danger" onclick="SalirAdmin()">Salir</button>
       </div>
       <div id="graficas"></div>
-      <button id="btndescargar" type="button" class="btn btn-primary" >Descargar</button>
+      <button id="btndescargar" type="button" class="btn btn-primary" onclick="DescargarImagen()">Descargar</button>
+      <button id="btnre" type="button" class="btn btn-primary" onclick="Reset()">Reset</button>
     </div>
     <div id="registro" style="display: none;">
       <form name="registar">
@@ -178,7 +180,7 @@
                 id=""
                 onchange=""
                 >
-                <a class="nav-link" onclick="">Categorias</a>
+                <a class="nav-link" onclick="CuadroCategorias()">Categorias</a>
               </li>
               <li class="nav-item">
                 <input
