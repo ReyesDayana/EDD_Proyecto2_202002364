@@ -10,7 +10,8 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>   
     <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.1/dist/html2canvas.min.js"></script> 
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="sha256.js"></script>
     <title>Proyecto 2</title>
 </head>
 <body>
@@ -88,7 +89,9 @@
             </div>
         </nav>
       </div>
-
+      <div id="btnblock">
+        <button id="btngraficar" type="button" class="btn btn-danger" onclick="CuadroBlock()" >Blockchain</button>
+      </div>
       <div id="botones">
         <p id="textografi"><b>Graficas</b></p>
         <button id="btngraficar" type="button" class="btn btn-primary" onclick="MostrarPeliculas()">Peliculas</button>
@@ -108,6 +111,19 @@
       <div id="graficas"></div>
       <button id="btndescargar" type="button" class="btn btn-primary" onclick="DescargarImagen()">Descargar</button>
       <button id="btnre" type="button" class="btn btn-primary" onclick="Reset()">Reset</button>
+    </div>
+    <div id="blockchain">
+      <div id="botonregresar">
+      <button id="btngraficar" type="button" class="btn btn-success" onclick="Regresaradmin()">Regresar</button>
+      </div>
+      <h1 style="text-align: center;">BLOCKCHAIN</h1>
+      <p style="text-align: center;">Arbol de Merkle</p>
+      <div id="graficamerkle"></div>
+      <p style="text-align: center;">Blockchain</p>
+      <input id="tiempo" type="text" size="20">
+      <button id="btngraficar" type="button" class="btn btn-success" onclick="CambiarTiempo()">Cambiar tiempo</button>
+      <button id="btngraficar" type="button" class="btn btn-success" onclick="Crear()">Crear Bloque</button>
+      <div id="bloockgrafica"></div>
     </div>
     <div id="registro" style="display: none;">
       <form name="registar">

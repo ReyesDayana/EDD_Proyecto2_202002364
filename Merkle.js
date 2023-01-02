@@ -43,7 +43,8 @@ class ArbolMerkle{
           this.HashValores(tmp.izquierda, n)
           this.HashValores(tmp.derecha, n)  
           if (tmp.izquierda == null && tmp.derecha == null) {
-            tmp.izquierda = this.datablock[n-index--]
+            tmp.izquierda = this.datablock[n-indexmerkle--]
+            
             if(tmp.izquierda.cliente==1 && tmp.izquierda.pelicula==1){
                 tmp.hash =sha256(""+1)
                 tmp.izquierda.cliente=this.contador
@@ -60,17 +61,17 @@ class ArbolMerkle{
       }
     auth() {
         var exp = 1
-        while (Math.pow(2, exp) < this.datablock.length) {
+        while (Math.pow(2, exp) < this.size) {
           exp += 1
         }
         for (var i = this.datablock.length; i < Math.pow(2, exp); i++) {
           this.datablock.push(new NodoData(1,1))
         }
-        index = Math.pow(2, exp)
+        indexmerkle = Math.pow(2, exp)
         this.creararbol(exp)
         this.HashValores(this.top, Math.pow(2, exp))
       }
-      Graficar(){
+    Graficar(){
         var graficarMerkle=""
         graficarMerkle+="digraph M { \n"
         graficarMerkle+='rankdir="BT" \n'
@@ -120,14 +121,127 @@ class ArbolMerkle{
         }
         return escribirgraf
       }
-      
+      Vaciar(){
+          this.top = null
+          this.datablock = []  
+      }
 }
-var index = 0
+var indexmerkle = 0
 var merkle = new ArbolMerkle()
-function mostrar(){
-    merkle.add(1,1)
-    merkle.auth()
-    console.log(merkle)
-    merkle.Graficar()
+class BloqueBC{
+  constructor(id,tiempo,data,nonce,previoshash,rootmerkle,hash){
+      this.id=id
+      this.tiempo=tiempo
+      this.data=data
+      this.nonce=nonce
+      this.previoshash=previoshash
+      this.rootmerkle=rootmerkle
+      this.hash=hash
+  }
 }
+class NodoBC{
+  constructor(bloque){
+      this.bloque=bloque
+      this.siguiente=null
+      this.anterior=null
+  }
+}
+class BC{
+  constructor(){
+      this.primero=null
+      this.ultimo=null
+      this.tamanio=0
+  }
+  
+  CrearBloque(){
+    var date = new Date(Date.now());
+    var dia=""
+    var fecha=""
+    if(date.getDate()<=9){
+      dia=0+""+date.getDate()
+    }
+    fecha=dia+"-"+date.getMonth()+1+"-"+date.getFullYear()+"-::"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()
+    var hashanterior = "";
+    if(this.vacio()){
+      hashanterior = "00"
+    }else{
+      hashanterior = this.ultimo.bloque.hash
+    }
+    merkle.auth()
+    var datos= merkle.datablock;
+    var guardar=""
+    console.log("QUE ES ESTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    console.log(nuevadata)
+    console.log(datos.length)
+      for (let i = nuevadata; i < datos.length; i++) {
+        if(isNaN(datos[i].cliente)){
+          guardar+=datos[i].pelicula+" - "+datos[i].cliente+"\n"
+        } 
+        nuevadata=nuevadata+1
+      }
+    var rootmerkle = merkle.top.hash
+    merkle.Vaciar()
+    var nonce = 0;
+    var hash = "";
+    while(!hash.startsWith("00")){	
+      hash = sha256(this.tamanio+date+hashanterior+rootmerkle+nonce);
+      nonce += 1;
+    } 
 
+    var data = new BloqueBC(this.tamanio,fecha,guardar,nonce,hashanterior,rootmerkle,hash);
+    this.Agregar(data)
+  }
+  Agregar(bloque){
+    var nuevonodo=new NodoBC(bloque)
+    if(this.primero==null){
+      this.primero=nuevonodo
+    }else{
+      this.ultimo.siguiente=nuevonodo
+      nuevonodo.anterior=this.ultimo
+    }
+    this.ultimo=nuevonodo
+    this.tamanio++
+  }
+  vacio(){
+		if(this.primero==null){
+      return true
+    }
+    return false
+	}
+  Graficar(){
+        var graficarblock=""
+        var nodoblock=""
+        var nodosiguienteblock=""
+        graficarblock+="digraph B { \n"
+        graficarblock+="node[shape=box] \n"
+        graficarblock+="label= \"Blockchain\" \n"
+        var auxiliar=this.primero
+        while(auxiliar!=null){
+            nodoblock = "bloque" + auxiliar.bloque.id
+            graficarblock+= nodoblock + "[label=\"id: " + auxiliar.bloque.id+ "\n Hash: " + auxiliar.bloque.hash + "\n fecha: " + auxiliar.bloque.tiempo + "\n hash anterior: " + auxiliar.bloque.previoshash + "\n data: " + auxiliar.bloque.data + "\n rootmerkle: " + auxiliar.bloque.rootmerkle + "\n nonce: " + auxiliar.bloque.nonce + " \"] \n"
+            auxiliar = auxiliar.siguiente
+        }
+    
+        var aux = this.primero
+        while (aux.siguiente != null) {
+            nodoblock = "bloque" + aux.bloque.id
+            nodosiguienteblock = "bloque" + aux.siguiente.bloque.id
+            graficarblock += "{rank=same; " + nodoblock + " ->" + nodosiguienteblock + "}\n";
+            aux = aux.siguiente
+        }
+        graficarblock += "}";
+        console.log(graficarblock)
+  }
+}
+var block=new BC()
+var tiempo = 10000
+var nuevadata=0
+var as = setInterval(()=>{
+
+	block.CrearBloque();  
+	console.log(block)
+	
+},tiempo)
+function mostrar(){
+  block.Graficar()
+}
