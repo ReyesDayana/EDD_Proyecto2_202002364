@@ -61,7 +61,7 @@ class ArbolMerkle{
       }
     auth() {
         var exp = 1
-        while (Math.pow(2, exp) < this.size) {
+        while (Math.pow(2, exp) < this.datablock.length) {
           exp += 1
         }
         for (var i = this.datablock.length; i < Math.pow(2, exp); i++) {
